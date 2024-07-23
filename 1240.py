@@ -28,16 +28,19 @@ for test_case in range(1, T + 1):
         for idx, cd in enumerate(code_li):
             if code_str[i*7: i*7+7] == cd:
                 code_arr.append(idx)
-                if idx%2 == 1:
-                    cal_code += (idx * 3)
-                else:
-                    cal_code += idx
+
                 break
                 #print(code_arr)
                 #print(idx)
-    print(code_arr)
+    #print(code_arr)
 
     result=0
+
+    for idx, num in enumerate(code_arr):
+        if idx % 2 == 0:
+            cal_code += (num * 3)
+        else:
+            cal_code += num
 
     if cal_code % 10 == 0:
         result = sum(code_arr)
