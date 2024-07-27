@@ -1,52 +1,52 @@
-import sys
-sys.stdin = open("input.txt", "r")
+T = int(input())
 
-st=[]
-def dfs(cal_arr, idx):
-    if(idx >= len(cal_arr)):
-        return
-    # 방문 === 계산 을 후위순회로 처리.
-    # 계산 결과를 반환 받아야 다음 계산에 사용함
-    dfs(cal_arr, 2*idx + 1)
-    dfs(cal_arr, 2*idx + 2)
+def is_slope(li, size_x)->int:
+    free_space = 1
 
-    #후위 표기식으로 계산
-    if cal_arr[idx] == "+":
-        num1 = st.pop()
-        num2 = st.pop()
-        st.append(str(int(num2) + int(num1)))
-    elif cal_arr[idx] == "-":
-        num1 = st.pop()
-        num2 = st.pop()
-        st.append(str(int(num2) - int(num1)))
-    elif cal_arr[idx] == "*":
-        num1 = st.pop()
-        num2 = st.pop()
-        st.append(str(int(num2) * int(num1)))
-    elif cal_arr[idx] == "/":
-        num1 = st.pop()
-        num2 = st.pop()
-        st.append(str(float(int(num2) / int(num1))))
+#주어진 input에서 경사가 증가하면 과연 맞는지 따지는 게 아니라,
+#진짜 경사가 증가하려면 input에서 값이 증가하는 것과 동시에 그 조건을 만족하는지
+#확인해주는 과정을 같이 넣으면 훨씬 코드가 간결해짐
+    for i in range(1, len(li)):
+        if(abs(li[i-1] - li[i]) >= 2):
+            return 0
+        if(li[i-1] == li[i]):
+            free_space += 1
+        elif (li[i-1] < li[i]) and (free_space >= size_x):#경사 증가 하려면
+            free_space = 1
+
+        elif li[i-1] > li[i] and (free_space >= 0):#경사 감소
+            free_space = -size_x+1 # -1 + 1
+        else:
+            return 0
+
+    if free_space >= 0:
+        #print(li)
+        return 1
     else:
-        # 피연산자가 왔을 경우
-        st.append(cal_arr[idx])
-        pass
+        return 0
 
-    return
+                
+                
 
-
-T = 10
 # 여러개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
 for test_case in range(1, T + 1):
-    num = int(input())
-    # 수식 배열
-    # 완전 이진 트리에만 해당되는 풀이
-    cal_arr = [input().split()[1] for _ in range(num)]
+    num, size_x = map(int, input().split())
+    board = [list(map(int, input().split())) for _ in range(num)]
 
-    result = dfs(cal_arr, 0)
+    #테스트할 라인마다 입력
+    test_line = [0]*num
 
-    print(f"{test_case} {st[-1]}")
+    count = 0
 
-    # 수식 배열 0을 채우고 시작했기 때문에
-    # 왼쪽자식은 2n+1 오른쪽 자식은 2n+2가 된다
+    for y in range(num):
+        for x in range(num):
+            test_line[x] = board[y][x]
+        count += is_slope(test_line, size_x)
+    for y in range(num):
+        for x in range(num):
+            test_line[x] = board[x][y]
+        count += is_slope(test_line, size_x)
+    
+    print(f"#{test_case} {count}")
+
 
