@@ -42,35 +42,27 @@ def BFS(atom_info):
             continue
 
         # 같은 자리
-        if visited[nx][ny] == dist+1:
-            score += point
-            # print(nx, ny, dist, score)
-            new_q = []
+        # nx, ny, dist 인 놈을 찾거나, nx ny dist+1 인 놈이 충돌임
+        new_q = []
+        #print(point)
+
+        if visited[nx][ny] != -1:
+            is_conflict = 0
             for elem in q:
-                if elem[0] == nx and elem[1] == ny and elem[4] == dist+1:
-                    score += elem[3]
-                    # print(elem[0], elem[1], dist, score)
-                    continue
-                new_q.append(elem)
-            q = deque(new_q)
-            continue
-        else:
-            # 부딛혔다 판단시 큐를 새로 만들기
-            if nx2 < 0 or ny2 < 0 or nx2 >= SIZE_X or ny2 >= SIZE_Y:
-                pass
-            else:
-                if visited[nx2][ny2] == dist:
+                if elem[0] == nx and elem[1] == ny and elem[4] == dist:
+                    is_conflict = 1
                     score += point
-                    # print(nx, ny, dist, score)
-                    new_q = []
-                    for elem in q:
-                        if elem[0] == nx2 and elem[1] == ny2 and elem[4] == dist:
-                            score += elem[3]
-                            # print(elem[0], elem[1], dist, score)
-                            continue
-                        new_q.append(elem)
-                    q = deque(new_q)
                     continue
+                if elem[0] == nx and elem[1] == ny and elem[4] == dist+1:
+                    is_conflict = 1
+                    score += point
+                    #print(point)
+                    #print(score)
+                    continue
+
+                new_q.append(elem)
+                q = deque(new_q)
+
 
 
         visited[nx][ny] = dist+1
