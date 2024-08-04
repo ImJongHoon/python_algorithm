@@ -21,10 +21,12 @@ score_dict = {}
 for test_case in range(1, T + 1):
     num = int(input())
     food_arr = [list(map(int, input().split())) for _ in range(num)]
+    print(food_arr)
 
     #음식 선택의 경우의 수
     result = comb(range(num), num/2)
     #print(result)
+    #인덱스
 
     #모든 경우를 점수 계산한 dict 생성
     score_dict = {}
@@ -37,12 +39,13 @@ for test_case in range(1, T + 1):
         for first in calc:
             for second in calc:
                 score += food_arr[first][second]
+                #print(food_arr[first][second])
 
         score_dict[tuple(calc)] = score
-    #print(score_dict)
+    print(score_dict)
 
 
-    min_point = 987654321
+    min_point = float("inf")
 
     for calc in result:
         # 반대 생성
