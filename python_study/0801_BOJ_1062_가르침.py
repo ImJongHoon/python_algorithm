@@ -1,3 +1,6 @@
+import sys
+sys.stdin = open("input.txt", "r")
+
 BASEWORD = 5
 
 max_num = 0
@@ -7,19 +10,17 @@ def teach_word(check_words, word_arr, max_teach, idx, teached_words):
     #더 이상 가르칠 수 없을 때
     if max_teach == 0 or idx >= len(check_words):
         cnt = 0
-
         for word in word_arr:
             #이미 배운 글자들
             is_know = 1
-            print(word)
             for elem in word:
-                print(teached_words)
                 if elem in teached_words:
                     continue
                 else:
                     is_know = 0
                     break
             if is_know:
+                #print(check_words, word_arr, max_teach, idx, teached_words)
                 cnt += 1
 
         max_num = max(max_num, cnt)
@@ -27,8 +28,13 @@ def teach_word(check_words, word_arr, max_teach, idx, teached_words):
         return
     
     
+    
+    teached_words.add(check_words[idx])
+    teach_word(check_words, word_arr, max_teach - 1, idx+1, teached_words)
+    #print(teached_words)
+    teached_words.remove(check_words[idx])
     teach_word(check_words, word_arr, max_teach, idx+1, teached_words)
-    teach_word(check_words, word_arr, max_teach, idx+1, teached_words.add(check_words[idx]))
+    #print(teached_words)
 
 
 
@@ -67,7 +73,7 @@ def main():
     teach_word(list(check_words), word_arr, max_teach, 0, teached_words)
 
     #print(word_num, max_teach)
-    #print(words)
+    print(max_num)
 
 
 if __name__ == "__main__":
