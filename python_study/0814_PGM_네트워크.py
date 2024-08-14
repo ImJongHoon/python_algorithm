@@ -1,0 +1,26 @@
+def DFS(graph, visited, start_graph):
+    for vertex in graph[start_graph]:
+        if visited[vertex] == 1:
+            continue
+        visited[vertex] = 1
+        DFS(graph, visited, vertex)
+
+    return
+
+def solution(n, computers):
+    answer = 0
+    graph = [[] for _ in range(n+1)]
+    visited = [0] * range(n+1)
+
+    for computer, idx_node in enumerate(computers):
+        for vertex, idx_child in enumerate(computer):
+            if vertex == 1:
+                graph[idx_node + 1].append(idx_child+1)
+
+    for i in range(1, n+1):
+        if visited[i] == 0:
+            answer += 1
+            visited[i] = 1
+            DFS(graph, visited, i)
+
+    return answer
